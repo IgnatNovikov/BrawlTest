@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://du8o8vc3ghjdv"
+path="res://.godot/imported/ground_slash_mesh.obj-89e59b087413cae5e4aeb2620ee431cf.mesh"
+
+[deps]
+
+files=["res://.godot/imported/ground_slash_mesh.obj-89e59b087413cae5e4aeb2620ee431cf.mesh"]
+
+source_file="res://Temp/Meshes/ground_slash_mesh.obj"
+dest_files=["res://.godot/imported/ground_slash_mesh.obj-89e59b087413cae5e4aeb2620ee431cf.mesh", "res://.godot/imported/ground_slash_mesh.obj-89e59b087413cae5e4aeb2620ee431cf.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

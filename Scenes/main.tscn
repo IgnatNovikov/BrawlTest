@@ -1,0 +1,475 @@
+[gd_scene load_steps=58 format=4 uid="uid://5itqiu2k6wnt"]
+
+[ext_resource type="Script" path="res://Scripts/Character/character_controller.gd" id="1_alwhy"]
+[ext_resource type="Texture2D" uid="uid://bjnh0hb8omyqc" path="res://Temp/LevelPrototypeTextures/Dark/texture_01.png" id="2_crlfe"]
+[ext_resource type="Script" path="res://Scripts/Attacks/main_attack.gd" id="2_jq1qc"]
+[ext_resource type="Texture2D" uid="uid://b6w7x8bjqw5tu" path="res://Temp/Textures/CharacterPointer.png" id="2_mf3r7"]
+[ext_resource type="Texture2D" uid="uid://bp314kjc67myc" path="res://Temp/Textures/flare_texture_01.png" id="2_mkvfh"]
+[ext_resource type="Script" path="res://Scripts/Character/character_state_machine.gd" id="3_axye2"]
+[ext_resource type="Script" path="res://Scripts/dummy_controller.gd" id="3_wdekt"]
+[ext_resource type="Resource" uid="uid://5x3iterjd07m" path="res://Resources/character_parameters.tres" id="4_fvbee"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_idle_state.gd" id="4_yfk6s"]
+[ext_resource type="Shader" uid="uid://mhhoj6m12643" path="res://Shaders/slash_shader.tres" id="5_6n0yl"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_moving_state.gd" id="5_hx88n"]
+[ext_resource type="Texture2D" uid="uid://3fotwm6nutgj" path="res://Temp/Textures/Gradient01.png" id="5_vbot0"]
+[ext_resource type="ArrayMesh" uid="uid://bgrcjphl6hewj" path="res://Temp/Meshes/circle_slash_cuted_mesh.obj" id="6_ihsjt"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_falling_state.gd" id="6_qi75o"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_jump_state.gd" id="7_3eynp"]
+[ext_resource type="Texture2D" uid="uid://cx52j42eejnao" path="res://Temp/Textures/horizontal_gradient_texture_01.png" id="7_brhrs"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_main_attack_1_state.gd" id="8_1fo0y"]
+[ext_resource type="Texture2D" uid="uid://b5gbtqq3regdp" path="res://Temp/Textures/voronoi_texture_01.png" id="8_i2lgf"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_knock_back_state.gd" id="9_gjrbn"]
+[ext_resource type="Script" path="res://Scripts/States/Character/character_stagger_state.gd" id="10_1u88d"]
+[ext_resource type="PackedScene" uid="uid://cofagd8hkc34l" path="res://Prefabs/projectile.tscn" id="19_c25q8"]
+[ext_resource type="Shader" uid="uid://bftkf6rt4h44g" path="res://Shaders/new_radial_progress_shader.tres" id="19_ghsbb"]
+[ext_resource type="Script" path="res://Scripts/Utilities/radial_progress_controller.gd" id="20_jv0op"]
+[ext_resource type="Shader" uid="uid://c348b61qujbhv" path="res://Shaders/health_bar_shader.tres" id="21_42ypo"]
+[ext_resource type="Script" path="res://Scripts/Utilities/damage_label_controller.gd" id="21_d5c0p"]
+[ext_resource type="PackedScene" uid="uid://4ox060u4xm0k" path="res://Prefabs/jump_particles.tscn" id="25_0xife"]
+[ext_resource type="Script" path="res://Scripts/Utilities/health_bar_controller.gd" id="26_miebe"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2wmdq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kvspd"]
+albedo_color = Color(0.2352, 0.168, 0.84, 1)
+rim = 0.87
+anisotropy = 1.0
+backlight = Color(0, 0.833333, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lvww5"]
+material = SubResource("StandardMaterial3D_kvspd")
+radial_segments = 32
+rings = 16
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nr0mb"]
+size = Vector3(3.8291, 1, 2.50049)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2mg2m"]
+render_priority = 0
+shader = ExtResource("5_6n0yl")
+shader_parameter/MainTexSpeed = Vector2(0, 0)
+shader_parameter/FadeParameter = -0.1
+shader_parameter/Texture = ExtResource("5_vbot0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w1q4d"]
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 3.0
+color = Color(2.8, 1.3, 0.8, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0q4pf"]
+_surfaces = [{
+"aabb": AABB(-0.923879, -0.038981, -1, 1.84776, 0.077962, 0.842929),
+"attribute_data": PackedByteArray("r4C/AK+Arf6tqr8Araqt/k9/K/5Pf9IAyagr/smo0gCtqr8Araqt/qrUvwCq1K3+yagr/smo0gBD0iv+Q9LSAKrUvwCq1K3+p/6/AKf+rf5D0iv+Q9LSAL37K/69+9IAuAK/ALgCrf61LL8AtSyt/uECK/7hAtIAWywr/lss0gC1LL8AtSyt/rJWvwCyVq3+Wywr/lss0gDVVSv+1VXSALJWvwCyVq3+r4C/AK+Arf7VVSv+1VXSAE9/K/5Pf9IA"),
+"format": 34896613399,
+"index_count": 72,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcACAAJAAoACgAJAAsADAANAA4ADgANAA8AEAARABIAEgARABMAFAAVABYAFgAVABcAGAAZABoAGgAZABsAHAAdAB4AHgAdAB8AIAAhACIAIgAhACMAJAAlACYAJgAlACcAKAApACoAKgApACsALAAtAC4ALgAtAC8A"),
+"name": "Sphere",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("/3//fwAA4zz/fwAAC7PjPAS1/38eF+M8wpUAAIi84zz/f///C7Mbw/9//38AABvDwpX//4i8G8MEtf9/HhcbwwS1/38eFwk6wpUAAIi8CTr24f9/81gJOjWoAACO1wk6wpX//4i89cUEtf9/Hhf1xTWo//+O1/XF9uH/f/NY9cX24f9/81iqNDWoAACO16o0////f3q7qjSItAAA//+qNDWo//+O11TL9uH/f/NYVMuItP////9Uy////396u1TLAAD/f3q7qjR2SwAA//+qNAge/3/zWKo0yVcAAI7XqjR2S/////9UywAA/396u1TLyVf//47XVMsIHv9/81hUywge/3/zWAk6yVcAAI7XCTr6Sv9/HhcJOjxqAACIvAk6yVf//47X9cUIHv9/81j1xTxq//+IvPXF+kr/fx4X9cX6Sv9/HhfjPDxqAACIvOM8/3//fwAA4zz/fwAAC7PjPDxq//+IvBvD+kr/fx4XG8P/f///C7Mbw/9//38AABvD5gl8lOYJfJTmCXyU5gl8lILr5YmC6+WJguvliYLr5YnfFlav3xZWr98WVq/fFlavp9DelqfQ3pan0N6Wp9DelnEfEsFxHxLBcR8SwXEfEsHrvnCf675wn+u+cJ/rvnCfE0GOYBNBjmATQY5gE0GOYI3g7D6N4Ow+jeDsPo3g7D5XLyBpVy8gaVcvIGlXLyBpH+moUB/pqFAf6ahQH+moUHwUGXZ8FBl2fBQZdnwUGXYY9oJrGPaCaxj2gmsY9oJr")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_52r13"]
+parameter_name = "Texture"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_cdeeq"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6a625"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_e756y"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
+op_type = 2
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_2r2mg"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kxhf2"]
+parameter_name = "ColorParameter"
+qualifier = 2
+default_value_enabled = true
+default_value = Color(2.3, 1.5, 0.8, 1)
+
+[sub_resource type="VisualShader" id="VisualShader_7oo13"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+
+// Varyings
+varying vec3 var_Color;
+varying vec3 var_ColorParameter;
+
+instance uniform vec4 ColorParameter : source_color = vec4(2.300000, 1.500000, 0.800000, 1.000000);
+uniform sampler2D Texture;
+
+
+
+void vertex() {
+	var_Color = vec3(0.0);
+}
+
+void fragment() {
+// ColorParameter:25
+	vec4 n_out25p0 = ColorParameter;
+
+
+	vec4 n_out21p0;
+// Texture2D:21
+	n_out21p0 = texture(Texture, UV);
+	float n_out21p4 = n_out21p0.a;
+
+
+// VectorOp:23
+	vec4 n_out23p0 = n_out25p0 * n_out21p0;
+
+
+// Input:22
+	vec4 n_out22p0 = COLOR;
+	float n_out22p4 = n_out22p0.a;
+
+
+// FloatOp:24
+	float n_out24p0 = n_out22p4 * n_out21p4;
+
+
+// Output:0
+	ALBEDO = vec3(n_out23p0.xyz);
+	ALPHA = n_out24p0;
+
+
+	var_ColorParameter = vec3(0.0);
+}
+"
+graph_offset = Vector2(-1998.98, 813.328)
+flags/unshaded = true
+varyings/Color = "0,4"
+varyings/ColorParameter = "1,4"
+nodes/fragment/0/position = Vector2(-960, 1240)
+nodes/fragment/20/node = SubResource("VisualShaderNodeTexture2DParameter_52r13")
+nodes/fragment/20/position = Vector2(-1760, 1500)
+nodes/fragment/21/node = SubResource("VisualShaderNodeTexture_cdeeq")
+nodes/fragment/21/position = Vector2(-1420, 1500)
+nodes/fragment/22/node = SubResource("VisualShaderNodeInput_6a625")
+nodes/fragment/22/position = Vector2(-1480, 1240)
+nodes/fragment/23/node = SubResource("VisualShaderNodeVectorOp_e756y")
+nodes/fragment/23/position = Vector2(-1160, 1240)
+nodes/fragment/24/node = SubResource("VisualShaderNodeFloatOp_2r2mg")
+nodes/fragment/24/position = Vector2(-1160, 1500)
+nodes/fragment/25/node = SubResource("VisualShaderNodeColorParameter_kxhf2")
+nodes/fragment/25/position = Vector2(-1780, 1240)
+nodes/fragment/connections = PackedInt32Array(20, 0, 21, 2, 21, 0, 23, 1, 22, 4, 24, 0, 21, 4, 24, 1, 23, 0, 0, 0, 24, 0, 0, 1, 25, 0, 23, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5fybx"]
+render_priority = 0
+shader = SubResource("VisualShader_7oo13")
+shader_parameter/Texture = ExtResource("5_vbot0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8j1f7"]
+render_priority = 0
+shader = ExtResource("5_6n0yl")
+shader_parameter/MainTexSpeed = Vector2(1, 0)
+shader_parameter/FadeParameter = -0.2
+shader_parameter/Texture = ExtResource("8_i2lgf")
+shader_parameter/GradientTex = ExtResource("7_brhrs")
+
+[sub_resource type="Curve" id="Curve_efygm"]
+max_value = 2.0
+_data = [Vector2(0.0176991, 0), 0.0, 4.12, 0, 0, Vector2(1, 1.31868), 0.0827839, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cor17"]
+curve = SubResource("Curve_efygm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bfmdh"]
+particle_flag_rotate_y = true
+angle_min = 50.0
+angle_max = 50.0
+angular_velocity_min = -150.0
+angular_velocity_max = -150.0
+angular_velocity_curve = SubResource("CurveTexture_cor17")
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6486"]
+render_priority = 0
+shader = ExtResource("19_ghsbb")
+shader_parameter/Radius = 0.8
+shader_parameter/AntiAliasingPower = 200.0
+shader_parameter/Thickness = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qtjaw"]
+material = SubResource("ShaderMaterial_w6486")
+size = Vector2(0.4, 0.4)
+orientation = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ruwe"]
+render_priority = 0
+shader = ExtResource("21_42ypo")
+shader_parameter/ColorParameter = Color(1, 0, 0, 1)
+shader_parameter/DelayedColor = Color(0.980392, 0.796078, 0, 1)
+shader_parameter/BGColor = Color(0.3, 0.29705, 0.297, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y0naw"]
+material = SubResource("ShaderMaterial_7ruwe")
+size = Vector2(1, 0.1)
+orientation = 2
+
+[sub_resource type="Environment" id="Environment_60s0f"]
+background_mode = 1
+background_color = Color(0.799521, 0.765024, 0.820162, 1)
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_devib"]
+size = Vector3(20, 5, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8gwk"]
+albedo_texture = ExtResource("2_crlfe")
+uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v1qcm"]
+material = SubResource("StandardMaterial3D_t8gwk")
+size = Vector2(1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gteyy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y5ooj"]
+albedo_color = Color(0, 0.633333, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gq2wc"]
+material = SubResource("StandardMaterial3D_y5ooj")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." node_paths=PackedStringArray("_health_bar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_alwhy")
+_stagger_time = 0.3
+_max_health = 100.0
+_damage = 10.0
+_health_bar = NodePath("HealthBar")
+
+[node name="Sprite3D" type="Sprite3D" parent="CharacterBody3D"]
+transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 0.334786, 0)
+visible = false
+billboard = 1
+texture = ExtResource("2_mkvfh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_2wmdq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+layers = 2
+gi_mode = 0
+mesh = SubResource("SphereMesh_lvww5")
+
+[node name="Decal" type="Decal" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.5, -0.37)
+size = Vector3(1, 20, 1)
+texture_albedo = ExtResource("2_mf3r7")
+emission_energy = 0.0
+cull_mask = 1
+
+[node name="MainAttack" type="Area3D" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D" node_paths=PackedStringArray("_collider", "_timer", "_particles")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("2_jq1qc")
+_collider = NodePath("CollisionShape3D")
+_timer = NodePath("Timer")
+_particles = NodePath("CollisionShape3D/GPUParticles3D2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D/MainAttack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.02633)
+visible = false
+shape = SubResource("BoxShape3D_nr0mb")
+disabled = true
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D/MainAttack/CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01721, 1.68149)
+visible = false
+material_override = SubResource("ShaderMaterial_2mg2m")
+amount = 1
+lifetime = 0.2
+fixed_fps = 75
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_w1q4d")
+draw_pass_1 = ExtResource("6_ihsjt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D/MainAttack/CollisionShape3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -0.0359772, 1.68241)
+visible = false
+mesh = SubResource("ArrayMesh_0q4pf")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_5fybx")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D/MainAttack/CollisionShape3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.252, 1.026)
+material_override = SubResource("ShaderMaterial_8j1f7")
+instance_shader_parameters/ColorParameter = Color(2.3, 1, 0.8, 1)
+emitting = false
+amount = 1
+lifetime = 0.4
+one_shot = true
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bfmdh")
+draw_pass_1 = ExtResource("6_ihsjt")
+
+[node name="Timer" type="Timer" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D/MainAttack"]
+wait_time = 0.4
+one_shot = true
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 4.76837e-07, 8.93291, 3.77267)
+
+[node name="StateMachine" type="Node" parent="CharacterBody3D" node_paths=PackedStringArray("_initial_state")]
+script = ExtResource("3_axye2")
+_parameters = ExtResource("4_fvbee")
+_initial_state = NodePath("IdleState")
+
+[node name="IdleState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character")]
+script = ExtResource("4_yfk6s")
+_character = NodePath("../..")
+
+[node name="MovingState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character", "_view")]
+script = ExtResource("5_hx88n")
+_character = NodePath("../..")
+_view = NodePath("../../CollisionShape3D/MeshInstance3D")
+
+[node name="FallingState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character", "_view")]
+script = ExtResource("6_qi75o")
+_character = NodePath("../..")
+_view = NodePath("../../CollisionShape3D/MeshInstance3D")
+
+[node name="JumpState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character")]
+script = ExtResource("7_3eynp")
+_character = NodePath("../..")
+_jump_particles = ExtResource("25_0xife")
+
+[node name="MainAttack1State" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character", "_character_view", "_main_attack", "_camera", "_timer")]
+script = ExtResource("8_1fo0y")
+_character = NodePath("../..")
+_character_view = NodePath("../../CollisionShape3D/MeshInstance3D")
+_main_attack = NodePath("../../CollisionShape3D/MeshInstance3D/MainAttack")
+_damage = 10.0
+_power = 10.0
+_slowing = 1.0
+_camera = NodePath("../../Camera3D")
+_mask = 1
+_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="CharacterBody3D/StateMachine/MainAttack1State"]
+one_shot = true
+
+[node name="KnockBackState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character", "_timer")]
+script = ExtResource("9_gjrbn")
+_character = NodePath("../..")
+_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="CharacterBody3D/StateMachine/KnockBackState"]
+one_shot = true
+
+[node name="StaggerState" type="Node" parent="CharacterBody3D/StateMachine" node_paths=PackedStringArray("_character", "_timer")]
+script = ExtResource("10_1u88d")
+_character = NodePath("../..")
+_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="CharacterBody3D/StateMachine/StaggerState"]
+wait_time = 0.1
+one_shot = true
+
+[node name="RadialProgress" type="MeshInstance3D" parent="CharacterBody3D" node_paths=PackedStringArray("_timer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.969157, 0)
+mesh = SubResource("PlaneMesh_qtjaw")
+script = ExtResource("20_jv0op")
+_timer = NodePath("../StateMachine/MainAttack1State/Timer")
+
+[node name="HealthBar" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.794894, 0)
+instance_shader_parameters/DelayedProgress = 0.809
+instance_shader_parameters/Progress = 0.66
+mesh = SubResource("PlaneMesh_y0naw")
+script = ExtResource("26_miebe")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_60s0f")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.536711, 0.634649, 0.556023, 0, -0.658978, 0.752162, 0.843767, -0.403693, -0.353681, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="Node" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -12.5, 0)
+shape = SubResource("BoxShape3D_devib")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D/CollisionShape3D"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 2.5, 0)
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("PlaneMesh_v1qcm")
+
+[node name="Dummy" type="Node" parent="."]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="Dummy" node_paths=PackedStringArray("_view", "_health_bar", "_shoot_timer", "_push_timer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6.8242)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_wdekt")
+_view = NodePath("CollisionShape3D/MeshInstance3D")
+_health_bar = NodePath("HealthBar")
+_projectile = ExtResource("19_c25q8")
+_shoot_timer = NodePath("ShootTimer")
+_stop_power = 15.0
+_max_health = 100.0
+_push_timer = NodePath("Timer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dummy/CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_gteyy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dummy/CharacterBody3D/CollisionShape3D"]
+layers = 2
+mesh = SubResource("CylinderMesh_gq2wc")
+
+[node name="Timer" type="Timer" parent="Dummy/CharacterBody3D"]
+wait_time = 0.2
+one_shot = true
+
+[node name="LabelContainer" type="Node3D" parent="Dummy/CharacterBody3D" node_paths=PackedStringArray("_dummy", "_label_timer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47544, 0)
+script = ExtResource("21_d5c0p")
+_dummy = NodePath("..")
+_label_timer = NodePath("LabelTimer")
+
+[node name="Label3D" type="Label3D" parent="Dummy/CharacterBody3D/LabelContainer"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
+visible = false
+text = "500"
+font_size = 64
+uppercase = true
+
+[node name="LabelTimer" type="Timer" parent="Dummy/CharacterBody3D/LabelContainer"]
+one_shot = true
+
+[node name="ShootTimer" type="Timer" parent="Dummy/CharacterBody3D"]
+autostart = true
+
+[node name="HealthBar" type="MeshInstance3D" parent="Dummy/CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44208, 0)
+instance_shader_parameters/DelayedProgress = 0.809
+instance_shader_parameters/Progress = 0.66
+mesh = SubResource("PlaneMesh_y0naw")
+skeleton = NodePath("../../../CharacterBody3D")
+script = ExtResource("26_miebe")

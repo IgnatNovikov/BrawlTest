@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterParameters" load_steps=2 format=3 uid="uid://5x3iterjd07m"]
+
+[ext_resource type="Script" path="res://Scripts/Character/character_parameters.gd" id="1_ilvuq"]
+
+[resource]
+script = ExtResource("1_ilvuq")
+move_speed = 10.0
+gravity_multiplier = 3.0
+jump_velocity = 10.0
+slow_velocity = 1.0
+knock_back_horizontal_velocity = 15.0
+knock_back_vertical_velocity = 10.0
+knock_back_slowing_velocity = 0.3
+stagger_velocity = 10.0

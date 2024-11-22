@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b5d6rcsr6h053"
+path="res://.godot/imported/angled_cylinder_mesh.obj-32d1dd78d246392bf4b43872e4fa1dd2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/angled_cylinder_mesh.obj-32d1dd78d246392bf4b43872e4fa1dd2.mesh"]
+
+source_file="res://Temp/Meshes/angled_cylinder_mesh.obj"
+dest_files=["res://.godot/imported/angled_cylinder_mesh.obj-32d1dd78d246392bf4b43872e4fa1dd2.mesh", "res://.godot/imported/angled_cylinder_mesh.obj-32d1dd78d246392bf4b43872e4fa1dd2.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

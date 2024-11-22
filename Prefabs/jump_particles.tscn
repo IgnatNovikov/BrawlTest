@@ -1,0 +1,55 @@
+[gd_scene load_steps=10 format=4 uid="uid://4ox060u4xm0k"]
+
+[ext_resource type="Shader" uid="uid://d0mxf68svjipc" path="res://Shaders/jump_poof_shader.tres" id="1_0vt0w"]
+[ext_resource type="Texture2D" uid="uid://cgs8ntqthacrx" path="res://Temp/Textures/IMG_1356.PNG" id="2_p5bas"]
+
+[sub_resource type="Gradient" id="Gradient_d2qqu"]
+offsets = PackedFloat32Array(0, 0.215613, 1)
+colors = PackedColorArray(0.281187, 0.281187, 0.281187, 1, 0.435294, 0.435294, 0.435294, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4d2yi"]
+gradient = SubResource("Gradient_d2qqu")
+
+[sub_resource type="Curve" id="Curve_b1lay"]
+_data = [Vector2(0, 0.0386703), 0.0, 1.92603, 0, 0, Vector2(1, 1), 0.743344, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_utljb"]
+curve = SubResource("Curve_b1lay")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_osrut"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_utljb")
+color = Color(0.505882, 0.505882, 0.505882, 0.635294)
+color_ramp = SubResource("GradientTexture1D_4d2yi")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4sqpn"]
+render_priority = 0
+shader = ExtResource("1_0vt0w")
+shader_parameter/MainTexture = ExtResource("2_p5bas")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7c11h"]
+_surfaces = [{
+"aabb": AABB(-1.29653, 0, -1.29653, 2.59305, 0.584432, 2.59305),
+"attribute_data": PackedByteArray("AOz//wDsTIAA8P//APBMgAD0//8A9EyA//f////3TID/+/////tMgP///////0yACoD//wqATIAKhP//CoRMgAqI//8KiEyACYz//wmMTIAJkP//CZBMgAmU//8JlEyACJj//wiYTIAInP//CJxMgAeg//8HoEyAB6T//wekTIAHqP//B6hMgAas//8GrEyABrD//wawTIAGtP//BrRMgAW4//8FuEyABbz//wW8TIAEwP//BMBMgATE//8ExEyABMj//wTITIADzP//A8xMgAPQ//8D0EyAA9T//wPUTIAC2P//AthMgALc//8C3EyAAeD//wHgTIAB5P//AeRMgAHo//8B6EyA"),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAgADAAQABAADAAUABAAFAAYABgAFAAcABgAHAAgACAAHAAkACAAJAAoACgAJAAsADAANAA4ADgANAA8ADgAPABAAEAAPABEAEAARABIAEgARABMAEgATABQAFAATABUAFAAVABYAFgAVABcAFgAXABgAGAAXABkAGAAZABoAGgAZABsAGgAbABwAHAAbAB0AHAAdAB4AHgAdAB8AHgAfACAAIAAfACEAIAAhACIAIgAhACMAIgAjACQAJAAjACUAJAAlACYAJgAlACcAJgAnACgAKAAnACkAKAApACoAKgApACsAKgArACwALAArAC0ALAAtAC4ALgAtAC8ALgAvADAAMAAvADEAMAAxADIAMgAxADMAMgAzADQANAAzADUANAA1ADYANgA1ADcANgA3ADgAOAA3ADkAOAA5ADoAOgA5ADsAOgA7ADwAPAA7AD0APAA9AD4APgA9AD8APgA/AEAAQAA/AEEAQABBAAAAAABBAAEA"),
+"material": SubResource("ShaderMaterial_4sqpn"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(2.0007, 1.98754, 0, 0),
+"vertex_count": 66,
+"vertex_data": PackedByteArray("/3///wAA3ez/fwAARh3d7PiY//91AvXsQpMAACsf9ez7sP//vgk97celAADJJD3tHMf//5IVs+3YtgAA6S2z7YHa//99JVjuzsUAADA6WO5s6v//4jhP7hXSAAAmSU/ubOr//+I4AvAV0gAAJkkC8ED2//8DTyLwNdsAADdaIvCJ/f//BmdD8dPgAAC8bEPx//////9/h/K44gAA/3+H8on9///4mOzz0+AAAEKT7PNA9v//+7Bv9TXbAADHpW/1bOr//xzHCvcV0gAA2LYK94Ha//+B2rv4zsUAAM7Fu/gcx///bOp9+ti2AAAV0n36+7D//0D2TPzHpQAANdtM/PiY//+J/SP+QpMAANPgI/7/f/////////9/AAC44v//Bmf//4n9I/68bAAA0+Aj/gNP//9A9kz8N1oAADXbTPziOP//bOp9+iZJAAAV0n36fSX//4Hau/gwOgAAzsW7+JIV//8cxwr36S0AANi2Cve+Cf//+7Bv9ckkAADHpW/1dQL///iY7PMrHwAAQpPs8wAA////f4fyRh0AAP9/h/J1Av//BmdD8SsfAAC8bEPxvgn//wNPIvDJJAAAN1oi8JIV///iOCjv6S0AACZJKO99Jf//fSVY7jA6AAAwOlju4jj//5IVs+0mSQAA6S2z7QNP//++CT3tN1oAAMkkPe0GZ///dQL17LxsAAArH/XsAAD/fwAA/3+vAuyNrwLsjeIET5niBE+ZwAb3osAG96JhCGmrYQhpq0AInbFACJyxYwtYtGMLWLQwC/m5MAv5uXUMicB1DInArA3VxqwN1cbdDgDN3Q4AzQ0QKNMNECjTQhFs2UIRbNmEEu7fhBLu39kT0+bZE9PmSRVK7kkVSu7jFpL24xaS9v9/Smf/f0pnknYcaZJ2HGlKbrVqSm61atRmJmzUZiZs7l97be5fe21sWbxubFm8bihT8m8oU/JvAE0icQBNInHVRlNy1UZTcolAinOJQIpz+TnOdPk5znQAMyd2ADMndmornndqK5539yI/efciP3lPGRx7Txkce+wNT33sDU99")
+}]
+blend_shape_mode = 0
+
+[node name="JumpParticles" type="GPUParticles3D"]
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+fixed_fps = 75
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_osrut")
+draw_pass_1 = SubResource("ArrayMesh_7c11h")

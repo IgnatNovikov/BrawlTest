@@ -1,0 +1,116 @@
+[gd_scene load_steps=19 format=3 uid="uid://bomd8xqyn0i6r"]
+
+[ext_resource type="Texture2D" uid="uid://bjnh0hb8omyqc" path="res://Temp/LevelPrototypeTextures/Dark/texture_01.png" id="1_ueaoj"]
+[ext_resource type="Shader" uid="uid://do0qcqqx8x2hb" path="res://Shaders/vfx_practice/pan_shader_tut.tres" id="2_5uyw3"]
+[ext_resource type="Texture2D" uid="uid://c1dhqlqxhuokq" path="res://Temp/Textures/Gradient02.png" id="3_cd8uh"]
+[ext_resource type="Texture2D" uid="uid://b5gbtqq3regdp" path="res://Temp/Textures/voronoi_texture_01.png" id="3_konl0"]
+[ext_resource type="Texture2D" uid="uid://bp314kjc67myc" path="res://Temp/Textures/flare_texture_01.png" id="4_ujfl4"]
+[ext_resource type="Shader" uid="uid://mhhoj6m12643" path="res://Shaders/slash_shader.tres" id="6_47h7f"]
+[ext_resource type="ArrayMesh" uid="uid://bgrcjphl6hewj" path="res://Temp/Meshes/circle_slash_cuted_mesh.obj" id="7_f1ixa"]
+[ext_resource type="Texture2D" uid="uid://cx52j42eejnao" path="res://Temp/Textures/horizontal_gradient_texture_01.png" id="7_s4yrn"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_it6wi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bflhj"]
+albedo_texture = ExtResource("1_ueaoj")
+uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="Environment" id="Environment_dwq66"]
+background_color = Color(0.33, 0.586833, 1, 1)
+glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_piitq"]
+render_priority = 0
+shader = ExtResource("2_5uyw3")
+shader_parameter/MainTexSpeed = Vector2(0, 1)
+shader_parameter/MainTexPower = 3.0
+shader_parameter/FloatParameter = 3.0
+shader_parameter/MainTex = ExtResource("3_konl0")
+shader_parameter/GradientTex = ExtResource("3_cd8uh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_30yji"]
+gravity = Vector3(0, 0, 0)
+scale_min = 0.7
+scale_max = 0.7
+color = Color(5, 2, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_bq16y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ku7nm"]
+transparency = 1
+blend_mode = 4
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_ujfl4")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y6g3x"]
+gravity = Vector3(0, 0, 0)
+scale_min = 0.8
+scale_max = 0.8
+color = Color(0.3, 0.1, 0.003, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_7wyau"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epu4x"]
+render_priority = 0
+shader = ExtResource("6_47h7f")
+shader_parameter/MainTexSpeed = Vector2(1, 0)
+shader_parameter/FadeParameter = -0.2
+shader_parameter/Texture = ExtResource("3_konl0")
+shader_parameter/GradientTex = ExtResource("7_s4yrn")
+
+[node name="VfxPractice" type="Node3D"]
+
+[node name="World" type="Node" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 0.837328, 0.546701, 0, -0.546701, 0.837328, 2.38419e-07, 2.12298, 2.69275)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_it6wi")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_bflhj")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_dwq66")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World/WorldEnvironment"]
+transform = Transform3D(0.789341, -0.536097, -0.299234, 0, -0.487387, 0.873186, -0.613955, -0.689242, -0.384715, 0, 1.13306, 0)
+
+[node name="fireball" type="Node3D" parent="."]
+
+[node name="Sphere" type="GPUParticles3D" parent="fireball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("ShaderMaterial_piitq")
+amount = 1
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_30yji")
+draw_pass_1 = SubResource("SphereMesh_bq16y")
+
+[node name="Flare" type="GPUParticles3D" parent="fireball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+sorting_offset = -1.0
+material_override = SubResource("StandardMaterial3D_ku7nm")
+amount = 1
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_y6g3x")
+draw_pass_1 = SubResource("QuadMesh_7wyau")
+
+[node name="Slash" type="Node3D" parent="."]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Slash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25236, 0)
+material_override = SubResource("ShaderMaterial_epu4x")
+instance_shader_parameters/ColorParameter = Color(2.3, 1, 0.8, 1)
+amount = 1
+fixed_fps = 60
+local_coords = true
+draw_pass_1 = ExtResource("7_f1ixa")
